@@ -1,5 +1,5 @@
 <template>
-    <div id="mapcontainer"></div>
+    <div class="w-full h-full absolute" id="mapcontainer"></div>
 </template>
 
 <script lang="ts">
@@ -37,12 +37,3 @@ export default defineComponent({
     },
 })
 </script>
-
-
-<style scoped>
-#mapcontainer {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-}
-</style>
