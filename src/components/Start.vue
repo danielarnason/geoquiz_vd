@@ -9,9 +9,25 @@
             <p>Klik i kortet og bekræft dit gæt</p>
         </div>
         <div class="startButton">
-            <button class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">
+            <button @click="showStart" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">
                 Start
             </button>
         </div>
     </div>
 </template>
+
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+    setup(props, { emit }) {
+        const showStart = () => {
+            emit('showStart', false)
+        }
+
+        return {
+            showStart
+        }
+    },
+})
+</script>

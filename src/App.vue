@@ -1,5 +1,5 @@
 <template>
-  <Start v-if="showStart" />
+  <Start @showStart="hideStart" v-if="showStart" />
   <Kort />
 </template>
 
@@ -17,8 +17,14 @@ export default defineComponent({
   setup() {
     const showStart = ref<boolean>(true)
 
+    const hideStart = (state: boolean) => {
+      console.log('Nu vil start page ikke vises længere!');
+      showStart.value = state
+    }
+
     return {
-      showStart
+      showStart,
+      hideStart
     }
   }
 });
