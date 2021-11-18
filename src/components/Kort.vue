@@ -3,14 +3,19 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, ref } from 'vue'
+import { defineComponent, onMounted, PropType, ref } from 'vue'
 import maplibregl, { Map } from 'maplibre-gl'
-import { fastfoodFeature } from "@/interfaces";
+import { fastfoodFeature } from '@/interfaces';
 
 export default defineComponent({
-    props: [
-        'locations'
-    ],
+    props: {
+        locations: {
+            type: Array as PropType<fastfoodFeature[]>,
+            default: () => {
+                return []
+            }
+        }
+    },
     setup() {
 
         const map = ref<Map>();
