@@ -1,15 +1,25 @@
 <template>
+  <Start v-if="showStart" />
   <Kort />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue';
 import Kort from '@/components/Kort.vue'
+import Start from '@/components/Start.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
-    Kort
+    Kort,
+    Start
+  },
+  setup() {
+    const showStart = ref<boolean>(true)
+
+    return {
+      showStart
+    }
   }
 });
 </script>

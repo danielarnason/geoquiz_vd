@@ -35,7 +35,7 @@ export default defineComponent({
                 zoom: 10,
                 accessToken: 'pk.eyJ1IjoiZGFuaWVsLWFybmFzb24iLCJhIjoiY2pyOHo2OXp3MGI2MDQ5dm1nMzZ0NjJycCJ9.ESsG_fdvITuPsMUbUevoGQ',
             })
-            map.value.addControl(new maplibregl.NavigationControl(), 'top-left');
+            // map.value.addControl(new maplibregl.NavigationControl(), 'top-left');
         })
 
         return {
