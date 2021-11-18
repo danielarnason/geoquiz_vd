@@ -8,6 +8,7 @@ import { defineComponent, ref } from 'vue';
 import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import { fastfood } from '@/assets/fastfood'
+import { fastfoodFeature } from '@/interfaces'
 
 export default defineComponent({
   name: 'App',
@@ -16,8 +17,8 @@ export default defineComponent({
     Start
   },
   setup() {
-    const showStart = ref<boolean>(true)
-    const locations = ref();
+    const showStart = ref<boolean>(true);
+    const locations = ref<fastfoodFeature[]>();
 
     const updateStart = (state: boolean) => {
       console.log('Nu vil start page ikke vises længere!');
@@ -25,7 +26,7 @@ export default defineComponent({
       locations.value = getRandomLocations(fastfood.features, 10)
     }
     
-    const getRandomLocations = (features: any, n: number) => {
+    const getRandomLocations = (features: fastfoodFeature[], n: number) => {
         const result = new Array(n);
         let len = features.length;
         const taken = new Array(len);
