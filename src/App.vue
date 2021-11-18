@@ -1,6 +1,6 @@
 <template>
   <Start @showStart="updateStart" v-if="showStart" />
-  <Kort />
+  <Kort :locations="locations" />
 </template>
 
 <script lang="ts">

@@ -5,8 +5,12 @@
 <script lang="ts">
 import { defineComponent, onMounted, ref } from 'vue'
 import maplibregl, { Map } from 'maplibre-gl'
+import { fastfoodFeature } from "@/interfaces";
 
 export default defineComponent({
+    props: [
+        'locations'
+    ],
     setup() {
 
         const map = ref<Map>();
