@@ -14,6 +14,9 @@ export default defineComponent({
             default: () => {
                 return []
             }
+        },
+        locationIndex: {
+            type: Number
         }
     },
     setup() {

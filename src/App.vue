@@ -1,6 +1,7 @@
 <template>
+  <Question @updateIndex="updateIndex" :locations="locations" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
-  <Kort :locations="locations" />
+  <Kort :locations="locations" :locationIndex="locIndex"/>
 </template>
 
 <script lang="ts">
@@ -9,21 +10,28 @@ import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import { fastfood } from '@/assets/fastfood'
 import { fastfoodFeature } from '@/interfaces'
+import Question from '@/components/Question.vue'
 
 export default defineComponent({
   name: 'App',
   components: {
     Kort,
-    Start
+    Start,
+    Question
   },
   setup() {
     const showStart = ref<boolean>(true);
     const locations = ref<fastfoodFeature[]>();
+    const locIndex = ref<number>(0);
 
     const updateStart = (state: boolean) => {
       console.log('Nu vil start page ikke vises længere!');
       showStart.value = state
       locations.value = getRandomLocations(fastfood.features, 10)
+    }
+
+    const updateIndex = () => {
+      locIndex.value++
     }
     
     const getRandomLocations = (features: fastfoodFeature[], n: number) => {
@@ -45,7 +53,9 @@ export default defineComponent({
     return {
       showStart,
       updateStart,
-      locations
+      locations,
+      locIndex,
+      updateIndex
     }
   }
 });
