@@ -15,6 +15,9 @@ export default defineComponent({
                 return []
             }
         },
+        currentLocation: {
+            type: Object as PropType<fastfoodFeature>
+        },
         locationIndex: {
             type: Number
         }
@@ -32,6 +35,10 @@ export default defineComponent({
                 accessToken: 'pk.eyJ1IjoiZGFuaWVsLWFybmFzb24iLCJhIjoiY2pyOHo2OXp3MGI2MDQ5dm1nMzZ0NjJycCJ9.ESsG_fdvITuPsMUbUevoGQ',
             })
             // map.value.addControl(new maplibregl.NavigationControl(), 'top-left');
+            map.value.on('click', (e) => {
+                console.log(e);
+                
+            })
         })
 
         return {

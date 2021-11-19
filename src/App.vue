@@ -1,11 +1,11 @@
 <template>
   <Question @updateIndex="updateIndex" :locations="locations" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
-  <Kort :locations="locations" :locationIndex="locIndex"/>
+  <Kort :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex"/>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, ref } from 'vue';
 import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import { fastfood } from '@/assets/fastfood'
@@ -21,7 +21,7 @@ export default defineComponent({
   },
   setup() {
     const showStart = ref<boolean>(true);
-    const locations = ref<fastfoodFeature[]>();
+    const locations = ref<fastfoodFeature[]>([]);
     const locIndex = ref<number>(0);
 
     const updateStart = (state: boolean) => {
@@ -33,6 +33,10 @@ export default defineComponent({
     const updateIndex = () => {
       locIndex.value++
     }
+
+    const currentLocation = computed(() => {
+      return locations.value[locIndex.value]
+    })
     
     const getRandomLocations = (features: fastfoodFeature[], n: number) => {
         const result = new Array(n);
@@ -55,7 +59,8 @@ export default defineComponent({
       updateStart,
       locations,
       locIndex,
-      updateIndex
+      updateIndex,
+      currentLocation
     }
   }
 });
