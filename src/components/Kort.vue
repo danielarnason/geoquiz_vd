@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, PropType, ref } from 'vue'
-import maplibregl, { Map } from 'maplibre-gl'
+import maplibregl, { Map, MapMouseEvent, Marker } from 'maplibre-gl'
 import { fastfoodFeature } from '@/interfaces';
 
 export default defineComponent({
@@ -24,7 +24,8 @@ export default defineComponent({
     },
     setup() {
 
-        const map = ref<Map>();
+        const map = ref<Map | any>();
+        const guessMarker = ref<Marker>();
 
         onMounted(() => {
             map.value = new maplibregl.Map({
@@ -34,15 +35,15 @@ export default defineComponent({
                 zoom: 10,
                 accessToken: 'pk.eyJ1IjoiZGFuaWVsLWFybmFzb24iLCJhIjoiY2pyOHo2OXp3MGI2MDQ5dm1nMzZ0NjJycCJ9.ESsG_fdvITuPsMUbUevoGQ',
             })
-            // map.value.addControl(new maplibregl.NavigationControl(), 'top-left');
-            map.value.on('click', (e) => {
-                console.log(e);
-                
+
+            map.value.on('click', (e: MapMouseEvent) => {
+                guessMarker.value = new maplibregl.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map.value);
             })
         })
 
         return {
-            map
+            map,
+            guessMarker
         }
     },
 })
