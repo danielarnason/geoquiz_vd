@@ -1,5 +1,5 @@
 <template>
-  <Question @updateIndex="updateIndex" :locations="locations" :locationIndex="locIndex" v-if="showStart == false" />
+  <Question @updateIndex="updateIndex" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
   <Kort :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex"/>
 </template>
