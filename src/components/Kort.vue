@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref } from 'vue'
+import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import maplibregl, { Map, MapMouseEvent, Marker } from 'maplibre-gl'
 import { fastfoodFeature } from '@/interfaces';
 
@@ -22,7 +22,7 @@ export default defineComponent({
             type: Number
         }
     },
-    setup() {
+    setup(props, { emit }) {
 
         const map = ref<Map | any>();
         const guessMarker = ref<Marker>();
@@ -37,8 +37,22 @@ export default defineComponent({
             })
 
             map.value.on('click', (e: MapMouseEvent) => {
-                guessMarker.value = new maplibregl.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map.value);
+                addMarker(e);
             })
+        })
+
+        const addMarker = (e: MapMouseEvent) => {
+            if (guessMarker.value === null) {
+                guessMarker.value = new maplibregl.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map.value);
+            } else {
+                guessMarker.value?.remove()
+                guessMarker.value = new maplibregl.Marker().setLngLat([e.lngLat.lng, e.lngLat.lat]).addTo(map.value);
+            }
+        }
+
+        watch(guessMarker, () => {
+            emit('guessUpdated', guessMarker.value)
+            
         })
 
         return {

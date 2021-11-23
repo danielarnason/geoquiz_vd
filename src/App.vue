@@ -1,7 +1,7 @@
 <template>
   <Question @updateIndex="updateIndex" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
-  <Kort :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex"/>
+  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex"/>
 </template>
 
 <script lang="ts">
@@ -11,6 +11,7 @@ import Start from '@/components/Start.vue'
 import { fastfood } from '@/assets/fastfood'
 import { fastfoodFeature } from '@/interfaces'
 import Question from '@/components/Question.vue'
+import { Marker } from 'maplibre-gl';
 
 export default defineComponent({
   name: 'App',
@@ -23,6 +24,7 @@ export default defineComponent({
     const showStart = ref<boolean>(true);
     const locations = ref<fastfoodFeature[]>([]);
     const locIndex = ref<number>(0);
+    const guess = ref<Marker>()
 
     const updateStart = (state: boolean) => {
       console.log('Nu vil start page ikke vises længere!');
@@ -32,6 +34,10 @@ export default defineComponent({
 
     const updateIndex = () => {
       locIndex.value++
+    }
+
+    const updateGuess = (guessMarker: Marker) => {
+      guess.value = guessMarker;
     }
 
     const currentLocation = computed(() => {
@@ -60,7 +66,9 @@ export default defineComponent({
       locations,
       locIndex,
       updateIndex,
-      currentLocation
+      currentLocation,
+      updateGuess,
+      guess
     }
   }
 });
