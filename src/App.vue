@@ -10,6 +10,7 @@ import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import { fastfood } from '@/assets/fastfood'
 import { fastfoodFeature } from '@/interfaces'
+import { lineString } from "@/linestringInterface";
 import Question from '@/components/Question.vue'
 import { Marker } from 'maplibre-gl';
 import distance from "@turf/distance";
@@ -27,6 +28,7 @@ export default defineComponent({
     const locIndex = ref<number>(0);
     const guess = ref<Marker | any>()
     const guessDistance = ref<number>();
+    const guessLinestring = ref<lineString>()
     const currentLocation = computed(() => {
       return locations.value[locIndex.value]
     })
@@ -94,7 +96,8 @@ export default defineComponent({
       currentLocation,
       updateGuess,
       guess,
-      handleGuess
+      handleGuess,
+      guessLinestring
     }
   }
 });
