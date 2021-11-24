@@ -1,5 +1,5 @@
 <template>
-  <Question @updateIndex="updateIndex" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
+  <Question @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
   <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex"/>
 </template>
@@ -12,6 +12,7 @@ import { fastfood } from '@/assets/fastfood'
 import { fastfoodFeature } from '@/interfaces'
 import Question from '@/components/Question.vue'
 import { Marker } from 'maplibre-gl';
+import distance from "@turf/distance";
 
 export default defineComponent({
   name: 'App',
@@ -24,7 +25,12 @@ export default defineComponent({
     const showStart = ref<boolean>(true);
     const locations = ref<fastfoodFeature[]>([]);
     const locIndex = ref<number>(0);
-    const guess = ref<Marker>()
+    const guess = ref<Marker | any>()
+    const guessDistance = ref<number>();
+    const currentLocation = computed(() => {
+      return locations.value[locIndex.value]
+    })
+
 
     const updateStart = (state: boolean) => {
       console.log('Nu vil start page ikke vises længere!');
@@ -38,11 +44,30 @@ export default defineComponent({
 
     const updateGuess = (guessMarker: Marker) => {
       guess.value = guessMarker;
+      guessDistance.value = getDistance([guess.value.getLngLat().lng, guess.value.getLngLat().lat], [currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]])
     }
 
-    const currentLocation = computed(() => {
-      return locations.value[locIndex.value]
-    })
+    const createLine = (p1: [number, number], p2: [number, number]) => {
+      return {
+        type: 'Feature',
+        properties: {},
+        geometry: {
+          type: 'Linestring',
+          coordinates: [p1, p2]
+        }
+      }
+    }
+
+    const getDistance = (p1: [number, number], p2: [number, number]) => {
+      return distance(p1, p2)
+    }
+
+    const handleGuess = () => {
+      console.log(guessDistance.value);
+      console.log(createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[0]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]));
+      
+    }
+
     
     const getRandomLocations = (features: fastfoodFeature[], n: number) => {
         const result = new Array(n);
@@ -68,7 +93,8 @@ export default defineComponent({
       updateIndex,
       currentLocation,
       updateGuess,
-      guess
+      guess,
+      handleGuess
     }
   }
 });
