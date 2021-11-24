@@ -7,6 +7,7 @@ import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import maplibregl, { Map, MapMouseEvent, Marker } from 'maplibre-gl'
 import { fastfoodFeature } from '@/interfaces';
 import { lineString } from '@/linestringInterface';
+import bbox from "@turf/bbox";
 
 export default defineComponent({
     props: {
@@ -57,6 +58,7 @@ export default defineComponent({
             }
         }
 
+
         watch(guessMarker, () => {
             emit('guessUpdated', guessMarker.value)
             
@@ -80,6 +82,9 @@ export default defineComponent({
                     'line-color': '#888',
                     'line-width': 8
                 }
+            })
+            map.value.fitBounds(bbox(line), {
+                padding: 100
             })
         }
 
