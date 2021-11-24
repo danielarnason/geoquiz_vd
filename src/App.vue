@@ -28,14 +28,13 @@ export default defineComponent({
     const locIndex = ref<number>(0);
     const guess = ref<Marker | any>()
     const guessDistance = ref<number>();
-    const guessLinestring = ref<lineString>()
+    const guessLinestring = ref<lineString | any>()
     const currentLocation = computed(() => {
       return locations.value[locIndex.value]
     })
 
 
     const updateStart = (state: boolean) => {
-      console.log('Nu vil start page ikke vises længere!');
       showStart.value = state
       locations.value = getRandomLocations(fastfood.features, 10)
     }
@@ -46,9 +45,6 @@ export default defineComponent({
 
     const updateGuess = (guessMarker: Marker) => {
       guess.value = guessMarker;
-      console.log([currentLocation.value.geometry.coordinates[1], currentLocation.value.geometry.coordinates[0]]);
-      
-      // guessDistance.value = getDistance([guess.value.getLngLat().lng, guess.value.getLngLat().lat], [currentLocation.value.geometry.coordinates[1], currentLocation.value.geometry.coordinates[0]])
     }
 
     const createLine = (p1: [number, number], p2: [number, number]) => {
@@ -67,7 +63,7 @@ export default defineComponent({
     }
 
     const handleGuess = () => {
-      guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[0]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
+      guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
     }
 
     
