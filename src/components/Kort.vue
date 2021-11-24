@@ -84,9 +84,6 @@ export default defineComponent({
         }
 
         watch(() => props.guessLinestring, (first, second) => {
-            console.log('Linje ændret!');
-            console.log(first);
-            console.log(second);
             addLine(first);
         })
 
