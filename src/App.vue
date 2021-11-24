@@ -1,7 +1,7 @@
 <template>
   <Question @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
-  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex"/>
+  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring"/>
 </template>
 
 <script lang="ts">
@@ -46,7 +46,9 @@ export default defineComponent({
 
     const updateGuess = (guessMarker: Marker) => {
       guess.value = guessMarker;
-      guessDistance.value = getDistance([guess.value.getLngLat().lng, guess.value.getLngLat().lat], [currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]])
+      console.log([currentLocation.value.geometry.coordinates[1], currentLocation.value.geometry.coordinates[0]]);
+      
+      // guessDistance.value = getDistance([guess.value.getLngLat().lng, guess.value.getLngLat().lat], [currentLocation.value.geometry.coordinates[1], currentLocation.value.geometry.coordinates[0]])
     }
 
     const createLine = (p1: [number, number], p2: [number, number]) => {
@@ -54,7 +56,7 @@ export default defineComponent({
         type: 'Feature',
         properties: {},
         geometry: {
-          type: 'Linestring',
+          type: 'LineString',
           coordinates: [p1, p2]
         }
       }
@@ -65,9 +67,7 @@ export default defineComponent({
     }
 
     const handleGuess = () => {
-      console.log(guessDistance.value);
-      console.log(createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[0]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]));
-      
+      guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[0]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
     }
 
     

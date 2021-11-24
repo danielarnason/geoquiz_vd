@@ -1,6 +1,6 @@
 interface geometry {
     type: string;
-    coordinates: number[];
+    coordinates: [[number, number], [number, number]];
 }
 
 export interface lineString {

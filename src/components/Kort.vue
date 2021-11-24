@@ -6,6 +6,7 @@
 import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import maplibregl, { Map, MapMouseEvent, Marker } from 'maplibre-gl'
 import { fastfoodFeature } from '@/interfaces';
+import { lineString } from '@/linestringInterface';
 
 export default defineComponent({
     props: {
@@ -20,6 +21,12 @@ export default defineComponent({
         },
         locationIndex: {
             type: Number
+        },
+        guessLinestring: {
+            type: Object as PropType<lineString>,
+            default: () => {
+                return {}
+            }
         }
     },
     setup(props, { emit }) {
@@ -53,6 +60,34 @@ export default defineComponent({
         watch(guessMarker, () => {
             emit('guessUpdated', guessMarker.value)
             
+        })
+
+        const addLine = (line: lineString) => {
+            map.value.addSource('guessLine', {
+                type: 'geojson',
+                data: line
+            });
+
+            map.value.addLayer({
+                id: 'line',
+                type: 'line',
+                source: 'guessLine',
+                layout: {
+                    'line-join': 'round',
+                    'line-cap': 'round'
+                },
+                paint: {
+                    'line-color': '#888',
+                    'line-width': 8
+                }
+            })
+        }
+
+        watch(() => props.guessLinestring, (first, second) => {
+            console.log('Linje ændret!');
+            console.log(first);
+            console.log(second);
+            addLine(first);
         })
 
         return {
