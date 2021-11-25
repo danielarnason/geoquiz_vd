@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
+import { computed, defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import maplibregl, { Map, MapMouseEvent, Marker } from 'maplibre-gl'
 import { fastfoodFeature } from '@/interfaces';
 import { lineString } from '@/linestringInterface';
@@ -18,7 +18,10 @@ export default defineComponent({
             }
         },
         currentLocation: {
-            type: Object as PropType<fastfoodFeature>
+            type: Object as PropType<fastfoodFeature>,
+            default: () => {
+                return {}
+            }
         },
         locationIndex: {
             type: Number
@@ -34,6 +37,9 @@ export default defineComponent({
 
         const map = ref<Map | any>();
         const guessMarker = ref<Marker>();
+        const currentLocationMarker = computed((): Marker => {
+            return new maplibregl.Marker({color: '#FF0000'}).setLngLat([props.currentLocation.geometry?.coordinates[0], props.currentLocation.geometry?.coordinates[1]])
+        })
 
         onMounted(() => {
             map.value = new maplibregl.Map({
@@ -88,13 +94,19 @@ export default defineComponent({
             })
         }
 
-        watch(() => props.guessLinestring, (first, second) => {
+        const addCurrentLocationMarker = (marker: Marker) => {
+            marker.addTo(map.value)
+        }
+
+        watch(() => props.guessLinestring, (first) => {
             addLine(first);
+            addCurrentLocationMarker(currentLocationMarker.value);
         })
 
         return {
             map,
-            guessMarker
+            guessMarker,
+            currentLocationMarker
         }
     },
 })
