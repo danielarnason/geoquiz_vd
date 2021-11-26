@@ -5,7 +5,8 @@
         </div>
         <div id="button" class="fixed bottom-8 z-10 text-center w-full text-yellow-100">
             <button v-if="guessButton" @click="guessUpdate" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">Gæt</button>
-            <button v-else @click="nextQuestion" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">Næste</button>
+            <button v-else-if="guessButton == false && locationIndex < 9" @click="nextQuestion" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">Næste</button>
+            <button v-else-if="guessButton == false && locationIndex == 9" @click="nextQuestion" class="text-3xl bg-red-800 hover:bg-red-900 w-44 mt-6 rounded pb-1">Se Resultat!</button>
         </div>
     </div>
 </template>

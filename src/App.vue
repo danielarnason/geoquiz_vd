@@ -24,6 +24,7 @@ export default defineComponent({
   },
   setup() {
     const showStart = ref<boolean>(true);
+    const showSummary = ref<boolean>(false);
     const locations = ref<fastfoodFeature[]>([]);
     const locIndex = ref<number>(0);
     const guess = ref<Marker | any>()
@@ -34,10 +35,12 @@ export default defineComponent({
       return locations.value[locIndex.value]
     });
 
+    const numberOfQuestions = 10;
+
 
     const updateStart = (state: boolean) => {
       showStart.value = state
-      locations.value = getRandomLocations(fastfood.features, 10)
+      locations.value = getRandomLocations(fastfood.features, numberOfQuestions)
     }
 
     const nextQuestion = () => {
@@ -66,19 +69,23 @@ export default defineComponent({
     }
 
     const handleGuess = () => {
-      guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
-      guessDistance.value = getDistance([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
-      totalGuessDistance.value = totalGuessDistance.value + guessDistance.value
+      if (locIndex.value < 10) {
+        guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
+        guessDistance.value = getDistance([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
+        totalGuessDistance.value = totalGuessDistance.value + guessDistance.value
+      } else {
+        showSummary.value = !showSummary.value
+      }
     } 
 
     
     const getRandomLocations = (features: fastfoodFeature[], n: number) => {
-        const result = new Array(n);
+      const result = new Array(n);
         let len = features.length;
         const taken = new Array(len);
 
         if (n > len) {
-            throw new RangeError("getRandomLocation: more elements taken than available")
+          throw new RangeError("getRandomLocation: more elements taken than available")
         } 
         while (n--) {
             const x = Math.floor(Math.random() * len);
@@ -99,7 +106,8 @@ export default defineComponent({
       guess,
       handleGuess,
       guessLinestring,
-      totalGuessDistance
+      totalGuessDistance,
+      showSummary
     }
   }
 });
