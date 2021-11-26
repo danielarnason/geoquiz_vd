@@ -31,6 +31,12 @@ export default defineComponent({
             default: () => {
                 return {}
             }
+        },
+        finished: {
+            type: Boolean,
+            default: () => {
+                return false
+            }
         }
     },
     setup(props, { emit }) {
@@ -138,7 +144,14 @@ export default defineComponent({
             zoomToSlagelse();
         })
 
+        watch(() => props.finished, () => {
+            removeLine();
 
+            guessMarker.value.remove();
+            currentLocationMarker.value?.remove();
+            
+            zoomToSlagelse();
+        })
 
         return {
             map,

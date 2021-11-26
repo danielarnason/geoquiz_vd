@@ -1,8 +1,8 @@
 <template>
-  <Summary v-if="showSummary" />
+  <Summary v-if="showSummary" :guessDistance="totalGuessDistance"/>
   <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
-  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring"/>
+  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished"/>
 </template>
 
 <script lang="ts">
@@ -28,6 +28,7 @@ export default defineComponent({
   setup() {
     const showStart = ref<boolean>(true);
     const showSummary = ref<boolean>(false);
+    const finished = ref<boolean>(false);
     const locations = ref<fastfoodFeature[]>([]);
     const locIndex = ref<number>(0);
     const guess = ref<Marker | any>()
@@ -53,6 +54,7 @@ export default defineComponent({
 
     const finishQuiz = () => {
       showSummary.value = !showSummary.value
+      finished.value = true
     }
 
     const updateGuess = (guessMarker: Marker) => {
@@ -75,13 +77,9 @@ export default defineComponent({
     }
 
     const handleGuess = () => {
-      if (locIndex.value < 10) {
-        guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
-        guessDistance.value = getDistance([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
-        totalGuessDistance.value = totalGuessDistance.value + guessDistance.value
-      } else {
-        showSummary.value = !showSummary.value
-      }
+      guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
+      guessDistance.value = getDistance([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
+      totalGuessDistance.value = totalGuessDistance.value + guessDistance.value
     } 
 
     
@@ -114,7 +112,8 @@ export default defineComponent({
       guessLinestring,
       totalGuessDistance,
       showSummary,
-      finishQuiz
+      finishQuiz,
+      finished
     }
   }
 });
