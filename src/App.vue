@@ -1,5 +1,5 @@
 <template>
-  <Question @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
+  <Question @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
   <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring"/>
 </template>
@@ -28,10 +28,11 @@ export default defineComponent({
     const locIndex = ref<number>(0);
     const guess = ref<Marker | any>()
     const guessDistance = ref<number>();
-    const guessLinestring = ref<lineString | any>()
+    const totalGuessDistance = ref<number>(0);
+    const guessLinestring = ref<lineString | any>();
     const currentLocation = computed(() => {
       return locations.value[locIndex.value]
-    })
+    });
 
 
     const updateStart = (state: boolean) => {
@@ -39,8 +40,10 @@ export default defineComponent({
       locations.value = getRandomLocations(fastfood.features, 10)
     }
 
-    const updateIndex = () => {
-      locIndex.value++
+    const nextQuestion = () => {
+      locIndex.value++;
+      guessLinestring.value = null;
+
     }
 
     const updateGuess = (guessMarker: Marker) => {
@@ -64,7 +67,9 @@ export default defineComponent({
 
     const handleGuess = () => {
       guessLinestring.value = createLine([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
-    }
+      guessDistance.value = getDistance([currentLocation.value.geometry.coordinates[0], currentLocation.value.geometry.coordinates[1]], [guess.value?.getLngLat().lng, guess.value?.getLngLat().lat]);
+      totalGuessDistance.value = totalGuessDistance.value + guessDistance.value
+    } 
 
     
     const getRandomLocations = (features: fastfoodFeature[], n: number) => {
@@ -88,12 +93,13 @@ export default defineComponent({
       updateStart,
       locations,
       locIndex,
-      updateIndex,
+      nextQuestion,
       currentLocation,
       updateGuess,
       guess,
       handleGuess,
-      guessLinestring
+      guessLinestring,
+      totalGuessDistance
     }
   }
 });

@@ -4,7 +4,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, watch } from 'vue'
-import maplibregl, { Map, MapMouseEvent, Marker } from 'maplibre-gl'
+import maplibregl, { LngLatLike, Map, MapMouseEvent, Marker } from 'maplibre-gl'
 import { fastfoodFeature } from '@/interfaces';
 import { lineString } from '@/linestringInterface';
 import bbox from "@turf/bbox";
@@ -36,10 +36,11 @@ export default defineComponent({
     setup(props, { emit }) {
 
         const map = ref<Map | any>();
-        const guessMarker = ref<Marker>();
-        const currentLocationMarker = computed((): Marker => {
-            return new maplibregl.Marker({color: '#FF0000'}).setLngLat([props.currentLocation.geometry?.coordinates[0], props.currentLocation.geometry?.coordinates[1]])
-        })
+        const guessMarker = ref<Marker | any>();
+        const currentLocationMarker = ref<Marker | any>();
+        // const currentLocationMarker = computed((): Marker => {
+        //     return new maplibregl.Marker({color: '#FF0000'}).setLngLat([props.currentLocation.geometry?.coordinates[0], props.currentLocation.geometry?.coordinates[1]])
+        // })
 
         onMounted(() => {
             map.value = new maplibregl.Map({
@@ -64,6 +65,14 @@ export default defineComponent({
             }
         }
 
+        const addCurrentLocationMarker = (coordinates: LngLatLike) => {
+            if (currentLocationMarker.value === null) {
+                currentLocationMarker.value = new maplibregl.Marker({color: '#ff0000'}).setLngLat(coordinates).addTo(map.value);
+            } else {
+                currentLocationMarker.value?.remove()
+                currentLocationMarker.value = new maplibregl.Marker({color: '#ff0000'}).setLngLat(coordinates).addTo(map.value);
+            }
+        }
 
         watch(guessMarker, () => {
             emit('guessUpdated', guessMarker.value)
@@ -71,37 +80,65 @@ export default defineComponent({
         })
 
         const addLine = (line: lineString) => {
-            map.value.addSource('guessLine', {
-                type: 'geojson',
-                data: line
-            });
+            if (line !== null) {
+                map.value.addSource('guessLine', {
+                    type: 'geojson',
+                    data: line
+                });
+    
+                map.value.addLayer({
+                    id: 'line',
+                    type: 'line',
+                    source: 'guessLine',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    paint: {
+                        'line-color': '#888',
+                        'line-width': 8
+                    }
+                })
+                map.value.fitBounds(bbox(line), {
+                    padding: 100
+                })
+            }
+        }
 
-            map.value.addLayer({
-                id: 'line',
-                type: 'line',
-                source: 'guessLine',
-                layout: {
-                    'line-join': 'round',
-                    'line-cap': 'round'
-                },
-                paint: {
-                    'line-color': '#888',
-                    'line-width': 8
-                }
-            })
-            map.value.fitBounds(bbox(line), {
-                padding: 100
+        const removeLine = () => {
+            if (map.value.getLayer('line')) {
+                map.value.removeLayer('line')
+            }
+
+            if (map.value.getSource('guessLine')) {
+                map.value.removeSource('guessLine')
+            }
+        }
+
+        const zoomToSlagelse = () => {
+            map.value.flyTo({
+                center: [11.295584 ,55.341815],
+                zoom: 10
             })
         }
 
-        const addCurrentLocationMarker = (marker: Marker) => {
-            marker.addTo(map.value)
-        }
-
-        watch(() => props.guessLinestring, (first) => {
-            addLine(first);
-            addCurrentLocationMarker(currentLocationMarker.value);
+        watch(() => props.guessLinestring, (newValue) => {
+            addLine(newValue);
+            if (newValue !== null) {
+                addCurrentLocationMarker([props.currentLocation.geometry.coordinates[0], props.currentLocation.geometry.coordinates[1]]);
+            }
         })
+
+        watch(() => props.locationIndex, () => {
+            removeLine();
+
+            guessMarker.value.remove();
+            currentLocationMarker.value?.remove();
+            
+            zoomToSlagelse();
+        })
+
+
 
         return {
             map,
