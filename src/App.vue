@@ -1,6 +1,6 @@
 <template>
   <Summary v-if="showSummary" :guessDistance="totalGuessDistance"/>
-  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
+  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" />
   <Start @showStart="updateStart" v-if="showStart" />
   <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished"/>
 </template>
