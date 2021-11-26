@@ -1,5 +1,6 @@
 <template>
-  <Question @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
+  <Summary v-if="showSummary" />
+  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" />
   <Start @showStart="updateStart" v-if="showStart" />
   <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring"/>
 </template>
@@ -8,6 +9,7 @@
 import { computed, defineComponent, ref } from 'vue';
 import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
+import Summary from '@/components/Summary.vue'
 import { fastfood } from '@/assets/fastfood'
 import { fastfoodFeature } from '@/interfaces'
 import { lineString } from "@/linestringInterface";
@@ -20,7 +22,8 @@ export default defineComponent({
   components: {
     Kort,
     Start,
-    Question
+    Question,
+    Summary
   },
   setup() {
     const showStart = ref<boolean>(true);
@@ -46,7 +49,10 @@ export default defineComponent({
     const nextQuestion = () => {
       locIndex.value++;
       guessLinestring.value = null;
+    }
 
+    const finishQuiz = () => {
+      showSummary.value = !showSummary.value
     }
 
     const updateGuess = (guessMarker: Marker) => {
@@ -107,7 +113,8 @@ export default defineComponent({
       handleGuess,
       guessLinestring,
       totalGuessDistance,
-      showSummary
+      showSummary,
+      finishQuiz
     }
   }
 });
