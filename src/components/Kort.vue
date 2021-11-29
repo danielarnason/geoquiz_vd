@@ -51,7 +51,7 @@ export default defineComponent({
         onMounted(() => {
             map.value = new maplibregl.Map({
                 container: 'mapcontainer',
-                style: 'mapbox://styles/mapbox/light-v10',
+                style: 'mapbox://styles/daniel-arnason/ckwl2xc0ce32215qnjxat7xfj',
                 center: [11.295584 ,55.341815],
                 zoom: 10,
                 accessToken: 'pk.eyJ1IjoiZGFuaWVsLWFybmFzb24iLCJhIjoiY2pyOHo2OXp3MGI2MDQ5dm1nMzZ0NjJycCJ9.ESsG_fdvITuPsMUbUevoGQ',
