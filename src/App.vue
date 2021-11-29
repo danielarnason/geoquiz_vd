@@ -1,5 +1,5 @@
 <template>
-  <Summary v-if="showSummary" :guessDistance="totalGuessDistance"/>
+  <Summary @playAgain="playAgain" v-if="showSummary" :guessDistance="totalGuessDistance"/>
   <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" />
   <Start @showStart="updateStart" v-if="showStart" />
   <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished"/>
@@ -45,6 +45,14 @@ export default defineComponent({
     const updateStart = (state: boolean) => {
       showStart.value = state
       locations.value = getRandomLocations(fastfood.features, numberOfQuestions)
+    }
+
+    const playAgain = () => {
+      showStart.value = true;
+      showSummary.value = false;
+      finished.value = false;
+      locIndex.value = 0;
+      totalGuessDistance.value = 0;
     }
 
     const nextQuestion = () => {
@@ -113,7 +121,8 @@ export default defineComponent({
       totalGuessDistance,
       showSummary,
       finishQuiz,
-      finished
+      finished,
+      playAgain
     }
   }
 });
