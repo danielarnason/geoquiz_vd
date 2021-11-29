@@ -6,7 +6,7 @@
             <p>Hvor godt kender du fastfood scenen i Slagelse?</p>
         </div>
         <div class="help">
-            <p>Klik i kortet og bekræft dit gæt</p>
+            <p>Klik på kortet og bekræft dit gæt</p>
         </div>
         <div class="startButton">
             <button @click="showStart" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">
