@@ -2,7 +2,7 @@
     <div>
         <div id="question" class="fixed pl-10 pt-10 z-10 text-red-800 text-4xl">
             <p>Hvor ligger <span class="font-bold">{{curLocation.properties.name}}</span>?</p>
-            <p v-if="guessDistance != 0"> Du er {{ Math.round(guessDistance * 10) / 10 }} km fra!</p>
+            <p v-if="guessDistance != 0"> Du ramte {{ distance }} ved siden af!</p>
         </div>
         <div v-if="finished == false" id="button" class="fixed bottom-8 z-10 text-center w-full text-yellow-100">
             <button v-if="guessButton" @click="guessUpdate" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">Gæt</button>
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { fastfoodFeature } from '@/interfaces'
-import { defineComponent, PropType, ref } from 'vue'
+import { computed, defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
     props: {
@@ -40,6 +40,13 @@ export default defineComponent({
     setup(props, {emit}) {
 
         const guessButton = ref<boolean>(true)
+        const distance = computed(() => {
+            if (props.guessDistance < 1) {
+                return `${Math.round(props.guessDistance * 1000)} m`;
+            } else {
+                return `${Math.round(props.guessDistance * 10) / 10} km`
+            }
+        })
 
         const guessUpdate = () => {
             emit('guessUpdate');
@@ -59,7 +66,8 @@ export default defineComponent({
             guessUpdate,
             guessButton,
             nextQuestion,
-            finishQuiz
+            finishQuiz,
+            distance
         }
     }
 })
