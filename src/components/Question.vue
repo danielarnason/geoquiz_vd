@@ -40,7 +40,6 @@ export default defineComponent({
         }
 
         const nextQuestion = () => {
-            console.log('Looper til næste spørgsmål');
             guessButton.value = !guessButton.value
             emit('nextQuestion')
         }

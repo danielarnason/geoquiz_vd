@@ -1,7 +1,7 @@
 <template>
   <Summary @playAgain="playAgain" v-if="showSummary" :guessDistance="totalGuessDistance"/>
   <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" />
-  <Start @showStart="updateStart" v-if="showStart" />
+  <Start @initialsChange="initialsUpdate" @showStart="updateStart" v-if="showStart" />
   <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished"/>
 </template>
 
@@ -16,6 +16,8 @@ import { lineString } from "@/linestringInterface";
 import Question from '@/components/Question.vue'
 import { Marker } from 'maplibre-gl';
 import distance from "@turf/distance";
+import { Highscore } from './highscoreInterface';
+import { supabase } from '@/supabase';
 
 export default defineComponent({
   name: 'App',
@@ -38,6 +40,7 @@ export default defineComponent({
     const currentLocation = computed(() => {
       return locations.value[locIndex.value]
     });
+    const playerInitials = ref<string>();
 
     const numberOfQuestions = 10;
 
@@ -60,13 +63,22 @@ export default defineComponent({
       guessLinestring.value = null;
     }
 
+    const insertHighscore = async () => {
+      await supabase.from<Highscore>('highscore').insert({name: playerInitials.value, score: totalGuessDistance.value})
+    }
+
     const finishQuiz = () => {
       showSummary.value = !showSummary.value
       finished.value = true
+      insertHighscore()
     }
 
     const updateGuess = (guessMarker: Marker) => {
       guess.value = guessMarker;
+    }
+
+    const initialsUpdate = (initials: string) =>  {
+      playerInitials.value = initials;
     }
 
     const createLine = (p1: [number, number], p2: [number, number]) => {
@@ -122,7 +134,9 @@ export default defineComponent({
       showSummary,
       finishQuiz,
       finished,
-      playAgain
+      playAgain,
+      initialsUpdate,
+      playerInitials
     }
   }
 });

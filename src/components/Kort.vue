@@ -96,14 +96,12 @@ export default defineComponent({
                     id: 'line',
                     type: 'line',
                     source: 'guessLine',
-                    layout: {
-                        'line-join': 'round',
-                        'line-cap': 'round'
-                    },
                     paint: {
-                        'line-color': '#888',
-                        'line-width': 8
-                    }
+                        'line-color': '#991b1b',
+                        'line-width': 3,
+                        'line-dasharray': [2, 1]
+                    },
+
                 })
                 map.value.fitBounds(bbox(line), {
                     padding: 100
