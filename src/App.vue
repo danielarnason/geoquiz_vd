@@ -1,8 +1,8 @@
 <template>
   <Summary @playAgain="playAgain" v-if="showSummary" :guessDistance="totalGuessDistance"/>
-  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" />
+  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" :guessDistance="guessDistance"/>
   <Start @initialsChange="initialsUpdate" @showStart="updateStart" v-if="showStart" />
-  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished"/>
+  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished" :guessDistance="guessDistance" />
 </template>
 
 <script lang="ts">
@@ -61,6 +61,7 @@ export default defineComponent({
     const nextQuestion = () => {
       locIndex.value++;
       guessLinestring.value = null;
+      guessDistance.value = 0;
     }
 
     const insertHighscore = async () => {
@@ -130,6 +131,7 @@ export default defineComponent({
       guess,
       handleGuess,
       guessLinestring,
+      guessDistance,
       totalGuessDistance,
       showSummary,
       finishQuiz,

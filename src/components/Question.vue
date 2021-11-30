@@ -2,6 +2,7 @@
     <div>
         <div id="question" class="fixed pl-10 pt-10 z-10 text-red-800 text-4xl">
             <p>Hvor ligger <span class="font-bold">{{curLocation.properties.name}}</span>?</p>
+            <p v-if="guessDistance != 0"> Du er {{ Math.round(guessDistance * 10) / 10 }} km fra!</p>
         </div>
         <div v-if="finished == false" id="button" class="fixed bottom-8 z-10 text-center w-full text-yellow-100">
             <button v-if="guessButton" @click="guessUpdate" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1">Gæt</button>
@@ -27,6 +28,12 @@ export default defineComponent({
             type: Boolean,
             default: () => {
                 return false
+            }
+        },
+        guessDistance: {
+            type: Number,
+            default: () => {
+                return 0
             }
         }
     },
