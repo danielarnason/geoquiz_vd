@@ -1,8 +1,8 @@
 <template>
     <div class="summary fixed w-full h-full bg-black bg-opacity-50 z-10 flex justify-center items-center flex-col text-yellow-100">
-        <div class="item text-center">
-            <h1>Du har gættet {{ roundedDistance }} km forkert!</h1>
-            <button @click="playAgain" class="text-3xl bg-red-800 hover:bg-red-900 w-36 mt-6 rounded pb-1 uppercase">Spil igen!</button>
+        <div class="item text-center text-3xl">
+            <h1>Du har gættet <span class="text-red-800 font-bold">{{ roundedDistance }} km</span> forkert!</h1>
+            <button @click="playAgain" class="bg-red-800 hover:bg-red-900 w-44 mt-6 rounded pb-1 uppercase">Spil igen!</button>
         </div>
     </div>
 </template>
