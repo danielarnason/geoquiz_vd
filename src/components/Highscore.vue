@@ -2,10 +2,10 @@
     <div v-if="highscores.length > 0" id="highscore" class="mt-3">
         <h1 class="text-center">Scoreboard!</h1>
         <table>
-            <tr class="text-xl font-bold text-red-400">
-                <th>Placering</th>
-                <th>Navn</th>
-                <th>Km forkert</th>
+            <tr class=" text-center text-xl font-bold text-red-400">
+                <th class="px-3">Placering</th>
+                <th class="px-3">Navn</th>
+                <th class="px-3">Km forkert</th>
             </tr>
             <tr class="text-center" v-for="(highscore, idx) in highscores" :key="highscore.id">
                 <td>{{ idx + 1 }}.</td>
