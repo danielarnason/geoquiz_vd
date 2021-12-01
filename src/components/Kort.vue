@@ -104,7 +104,8 @@ export default defineComponent({
 
                 })
                 map.value.fitBounds(bbox(line), {
-                    padding: 100
+                    padding: 100,
+                    speed: 2.5
                 })
             }
         }
@@ -122,7 +123,8 @@ export default defineComponent({
         const zoomToSlagelse = () => {
             map.value.flyTo({
                 center: [11.295584 ,55.341815],
-                zoom: 10
+                zoom: 10,
+                speed: 3
             })
         }
 
