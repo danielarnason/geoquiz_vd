@@ -1,9 +1,9 @@
 <template>
     <div class="start fixed w-full h-full bg-black bg-opacity-50 z-10 flex justify-center items-center flex-col text-yellow-100">
         <div class="intro text-center max-w-screen-sm">
-            <h2 class="text-4xl mb-6">Velkommen til <span class="font-bold text-red-400">Slagelse GEOQUIZ</span>
+            <h2 class="text-4xl mb-6">Velkommen til <span class="font-bold text-red-400">VD GEOQUIZ</span>
             </h2>
-            <p>Hvor godt kender du Slagelse?</p>
+            <p>Hvor godt kender du VD?</p>
         </div>
         <div class="help">
             <p>Klik på kortet og bekræft dit gæt</p>
@@ -15,21 +15,21 @@
         
 
         <div id="category" class="text-3xl">
-            <button :disabled="activateButton" @click="showStart('fastfood')" :class="dynClass">Fastfood</button>
-            <button :disabled="activateButton" @click="showStart('fortidsminder')" :class="dynClass">Fortidsminder</button>
+            <button :disabled="activateButton" @click="showStart('rastepladser')" :class="dynClass">Rastepladser</button>
+            <button :disabled="activateButton" @click="showStart('ladestandere')" :class="dynClass">Ladestandere</button>
         </div>
-        <Highscore />
+        <!-- <Highscore /> -->
     </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
-import Highscore from '@/components/Highscore.vue'
+// import Highscore from '@/components/Highscore.vue'
 
 export default defineComponent({
-    components: {
-        Highscore
-    },
+    // components: {
+    //     Highscore
+    // },
     setup(props, { emit }) {
 
         const initials = ref<string>("");

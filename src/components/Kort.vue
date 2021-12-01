@@ -52,8 +52,8 @@ export default defineComponent({
             map.value = new maplibregl.Map({
                 container: 'mapcontainer',
                 style: 'mapbox://styles/daniel-arnason/ckwl2xc0ce32215qnjxat7xfj',
-                center: [11.295584 ,55.341815],
-                zoom: 10,
+                center: [10.2039 ,56.1629],
+                zoom: 6,
                 accessToken: 'pk.eyJ1IjoiZGFuaWVsLWFybmFzb24iLCJhIjoiY2pyOHo2OXp3MGI2MDQ5dm1nMzZ0NjJycCJ9.ESsG_fdvITuPsMUbUevoGQ',
             })
 
@@ -120,10 +120,10 @@ export default defineComponent({
             }
         }
 
-        const zoomToSlagelse = () => {
+        const zoomToDk = () => {
             map.value.flyTo({
-                center: [11.295584 ,55.341815],
-                zoom: 10,
+                center: [10.2039 ,56.1629],
+                zoom: 6,
                 speed: 3
             })
         }
@@ -141,7 +141,7 @@ export default defineComponent({
             guessMarker.value.remove();
             currentLocationMarker.value?.remove();
             
-            zoomToSlagelse();
+            zoomToDk();
         })
 
         watch(() => props.finished, () => {
@@ -150,7 +150,7 @@ export default defineComponent({
             guessMarker.value.remove();
             currentLocationMarker.value?.remove();
             
-            zoomToSlagelse();
+            zoomToDk();
         })
 
         return {

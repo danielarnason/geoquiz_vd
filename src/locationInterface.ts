@@ -1,5 +1,10 @@
 interface locationProperties {
-    name: string;
+    featureId: string;
+    layerId: string;
+    title: string;
+    description: string;
+    latitude: string;
+    longitude: string;
 }
 
 interface locationGeometry {

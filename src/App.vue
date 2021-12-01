@@ -10,15 +10,12 @@ import { computed, defineComponent, ref } from 'vue';
 import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import Summary from '@/components/Summary.vue'
-import { fastfood } from '@/assets/fastfood'
-import { fortidsminder } from "@/assets/fortidsminder";
+import { rastepladser } from "@/assets/rastepladser";
 import { locationFeature } from '@/locationInterface'
 import { lineString } from "@/linestringInterface";
 import Question from '@/components/Question.vue'
 import { Marker } from 'maplibre-gl';
 import distance from "@turf/distance";
-import { Highscore } from './highscoreInterface';
-import { supabase } from '@/supabase';
 import { startData } from "@/showStartInterface";
 
 export default defineComponent({
@@ -42,6 +39,9 @@ export default defineComponent({
     const currentLocation = computed(() => {
       return locations.value[locIndex.value]
     });
+    const ladestandereLocations = computed(() => {
+      return rastepladser.features.filter(rasteplads => rasteplads.properties.description.includes('Ladestation'))
+    })
     const playerInitials = ref<string>();
     const category = ref<string>();
 
@@ -51,10 +51,12 @@ export default defineComponent({
     const updateStart = (data: startData) => {
       showStart.value = data.state;
       category.value = data.category;
-      if (data.category == 'fastfood') {
-        locations.value = getRandomLocations(fastfood.features, numberOfQuestions)
-      } else if (data.category == 'fortidsminder') {
-        locations.value = getRandomLocations(fortidsminder.features, numberOfQuestions)
+      if (data.category == 'rastepladser') {
+        locations.value = getRandomLocations(rastepladser.features, numberOfQuestions)
+      } else if (data.category == 'ladestandere') {
+        locations.value = getRandomLocations(ladestandereLocations.value, numberOfQuestions)
+        console.log(ladestandereLocations.value);
+        
       }
     }
 
@@ -72,19 +74,10 @@ export default defineComponent({
       guessDistance.value = 0;
     }
 
-    const insertHighscore = async () => {
-      if (category.value == 'fastfood') {
-        await supabase.from<Highscore>('highscore').insert({name: playerInitials.value, score: totalGuessDistance.value})
-      } else if (category.value == 'fortidsminder') {
-        await supabase.from<Highscore>('highscore_fortidsminder').insert({name: playerInitials.value, score:totalGuessDistance.value})
-      }
-    }
-
     const finishQuiz = () => {
       showSummary.value = !showSummary.value
       finished.value = true
       guessDistance.value = 0
-      insertHighscore()
     }
 
     const updateGuess = (guessMarker: Marker) => {
@@ -151,7 +144,8 @@ export default defineComponent({
       finished,
       playAgain,
       initialsUpdate,
-      playerInitials
+      playerInitials,
+      ladestandereLocations
     }
   }
 });

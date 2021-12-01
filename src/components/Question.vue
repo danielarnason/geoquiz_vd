@@ -2,7 +2,7 @@
     <div>
         <div v-if="finished == false" id="question" class="fixed pl-10 pt-10 z-10 text-red-400 text-4xl">
             <p class="text-purple-500">{{locationIndex + 1}} / 10</p>
-            <p>Hvor ligger <span class="font-bold">{{curLocation.properties.name}}</span>?</p>
+            <p>Hvor ligger <span class="font-bold">{{curLocation.properties.title}}</span>?</p>
             <p v-if="guessDistance != 0"> Du ramte {{ distance }} ved siden af!</p>
         </div>
         <div v-if="finished == false" id="button" class="fixed bottom-8 z-10 text-center w-full text-yellow-100">
