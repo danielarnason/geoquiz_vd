@@ -71,6 +71,7 @@ export default defineComponent({
     const finishQuiz = () => {
       showSummary.value = !showSummary.value
       finished.value = true
+      guessDistance.value = 0
       insertHighscore()
     }
 
