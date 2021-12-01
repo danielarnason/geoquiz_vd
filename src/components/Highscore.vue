@@ -1,8 +1,8 @@
 <template>
-    <div v-if="highscores.length > 0" id="highscore" class="mt-3">
-        <h1 class="text-center">Scoreboard!</h1>
+    <div v-if="highscores.length > 0" id="highscore" class="mt-10 p-5 rounded-xl bg-gray-800 bg-opacity-50">
+        <h1 class="text-center text-3xl text-red-400 font-bold">Scoreboard!</h1>
         <table>
-            <tr class=" text-center text-xl font-bold text-red-400">
+            <tr class=" text-center font-bold border-b border-yellow-100">
                 <th class="px-3">Placering</th>
                 <th class="px-3">Navn</th>
                 <th class="px-3">Km forkert</th>
