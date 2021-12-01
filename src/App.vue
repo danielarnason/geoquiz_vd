@@ -11,13 +11,15 @@ import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import Summary from '@/components/Summary.vue'
 import { fastfood } from '@/assets/fastfood'
-import { fastfoodFeature } from '@/interfaces'
+import { fortidsminder } from "@/assets/fortidsminder";
+import { locationFeature } from '@/locationInterface'
 import { lineString } from "@/linestringInterface";
 import Question from '@/components/Question.vue'
 import { Marker } from 'maplibre-gl';
 import distance from "@turf/distance";
 import { Highscore } from './highscoreInterface';
 import { supabase } from '@/supabase';
+import { startData } from "@/showStartInterface";
 
 export default defineComponent({
   name: 'App',
@@ -31,7 +33,7 @@ export default defineComponent({
     const showStart = ref<boolean>(true);
     const showSummary = ref<boolean>(false);
     const finished = ref<boolean>(false);
-    const locations = ref<fastfoodFeature[]>([]);
+    const locations = ref<locationFeature[]>([]);
     const locIndex = ref<number>(0);
     const guess = ref<Marker | any>()
     const guessDistance = ref<number>();
@@ -41,13 +43,19 @@ export default defineComponent({
       return locations.value[locIndex.value]
     });
     const playerInitials = ref<string>();
+    const category = ref<string>();
 
     const numberOfQuestions = 10;
 
 
-    const updateStart = (state: boolean) => {
-      showStart.value = state
-      locations.value = getRandomLocations(fastfood.features, numberOfQuestions)
+    const updateStart = (data: startData) => {
+      showStart.value = data.state;
+      category.value = data.category;
+      if (data.category == 'fastfood') {
+        locations.value = getRandomLocations(fastfood.features, numberOfQuestions)
+      } else if (data.category == 'fortidsminder') {
+        locations.value = getRandomLocations(fortidsminder.features, numberOfQuestions)
+      }
     }
 
     const playAgain = () => {
@@ -65,7 +73,11 @@ export default defineComponent({
     }
 
     const insertHighscore = async () => {
-      await supabase.from<Highscore>('highscore').insert({name: playerInitials.value, score: totalGuessDistance.value})
+      if (category.value == 'fastfood') {
+        await supabase.from<Highscore>('highscore').insert({name: playerInitials.value, score: totalGuessDistance.value})
+      } else if (category.value == 'fortidsminder') {
+        await supabase.from<Highscore>('highscore_fortidsminder').insert({name: playerInitials.value, score:totalGuessDistance.value})
+      }
     }
 
     const finishQuiz = () => {
@@ -105,7 +117,7 @@ export default defineComponent({
     } 
 
     
-    const getRandomLocations = (features: fastfoodFeature[], n: number) => {
+    const getRandomLocations = (features: locationFeature[], n: number) => {
       const result = new Array(n);
         let len = features.length;
         const taken = new Array(len);

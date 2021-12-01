@@ -5,20 +5,20 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, PropType, ref, watch } from 'vue'
 import maplibregl, { LngLatLike, Map, MapMouseEvent, Marker } from 'maplibre-gl'
-import { fastfoodFeature } from '@/interfaces';
+import { locationFeature } from '@/locationInterface';
 import { lineString } from '@/linestringInterface';
 import bbox from "@turf/bbox";
 
 export default defineComponent({
     props: {
         locations: {
-            type: Array as PropType<fastfoodFeature[]>,
+            type: Array as PropType<locationFeature[]>,
             default: () => {
                 return []
             }
         },
         currentLocation: {
-            type: Object as PropType<fastfoodFeature>,
+            type: Object as PropType<locationFeature>,
             default: () => {
                 return {}
             }

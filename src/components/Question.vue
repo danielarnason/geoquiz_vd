@@ -14,13 +14,13 @@
 </template>
 
 <script lang="ts">
-import { fastfoodFeature } from '@/interfaces'
+import { locationFeature } from '@/locationInterface'
 import { computed, defineComponent, PropType, ref } from 'vue'
 
 export default defineComponent({
     props: {
         curLocation: {
-            type: Object as PropType<fastfoodFeature>,
+            type: Object as PropType<locationFeature>,
         },
         locationIndex: {
             type: Number
