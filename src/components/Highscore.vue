@@ -2,7 +2,7 @@
     <div v-if="highscores.length > 0" id="highscore" class="mt-3">
         <h1 class="text-center">Scoreboard!</h1>
         <table>
-            <tr class="text-xl font-bold text-red-800">
+            <tr class="text-xl font-bold text-red-400">
                 <th>Placering</th>
                 <th>Navn</th>
                 <th>Km forkert</th>
