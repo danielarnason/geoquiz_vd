@@ -18,18 +18,18 @@
             <button :disabled="activateButton" @click="showStart('rastepladser')" :class="dynClass">Rastepladser</button>
             <button :disabled="activateButton" @click="showStart('ladestandere')" :class="dynClass">Ladestandere</button>
         </div>
-        <!-- <Highscore /> -->
+        <Highscore />
     </div>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, ref } from 'vue'
-// import Highscore from '@/components/Highscore.vue'
+import Highscore from '@/components/Highscore.vue'
 
 export default defineComponent({
-    // components: {
-    //     Highscore
-    // },
+    components: {
+        Highscore
+    },
     setup(props, { emit }) {
 
         const initials = ref<string>("");
@@ -46,7 +46,7 @@ export default defineComponent({
             } else {
                 return "bg-gray-800 m-3 w-56 mt-6 rounded pb-1 disabled:opacity-50 cursor-not-allowed"
             }
-        })
+        })  
         
         const showStart = (category: string) => {
             emit('showStart', {state: false, category: category})

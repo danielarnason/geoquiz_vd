@@ -17,6 +17,8 @@ import Question from '@/components/Question.vue'
 import { Marker } from 'maplibre-gl';
 import distance from "@turf/distance";
 import { startData } from "@/showStartInterface";
+import { supabase } from "@/supabase";
+import { Highscore } from "@/highscoreInterface";
 
 export default defineComponent({
   name: 'App',
@@ -73,11 +75,20 @@ export default defineComponent({
       guessLinestring.value = null;
       guessDistance.value = 0;
     }
+    
+    const insertHighscore = async () => {
+      if (category.value == 'rastepladser') {
+        await supabase.from<Highscore>('highscore_rastepladser').insert({name: playerInitials.value, score: totalGuessDistance.value})
+      } else if (category.value == 'ladestandere') {
+        await supabase.from<Highscore>('highscore_ladestandere').insert({name: playerInitials.value, score:totalGuessDistance.value})
+      }
+    }
 
     const finishQuiz = () => {
       showSummary.value = !showSummary.value
       finished.value = true
       guessDistance.value = 0
+      insertHighscore();
     }
 
     const updateGuess = (guessMarker: Marker) => {
