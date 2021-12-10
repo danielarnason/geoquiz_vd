@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^1.28.2",
     "@turf/bbox": "^6.5.0",
     "@turf/distance": "^6.5.0",
+    "canvas-confetti": "^1.4.0",
     "core-js": "^3.6.5",
     "maplibre-gl": "^1.15.2",
     "vue": "^3.0.0"
