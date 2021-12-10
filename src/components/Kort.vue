@@ -37,6 +37,12 @@ export default defineComponent({
             default: () => {
                 return false
             }
+        },
+        category: {
+            type: String,
+            default: () => {
+                return ''
+            }
         }
     },
     setup(props, { emit }) {
@@ -120,12 +126,20 @@ export default defineComponent({
             }
         }
 
-        const zoomToDk = () => {
-            map.value.flyTo({
-                center: [10.2039 ,56.1629],
-                zoom: 6,
-                speed: 3
-            })
+        const zoomToDk = (category: string) => {
+            if (category) {
+                map.value.flyTo({
+                    center: [11.866981, 54.824467],
+                    zoom: 11,
+                    speed: 3
+                })
+            } else {
+                map.value.flyTo({
+                    center: [10.2039 ,56.1629],
+                    zoom: 6,
+                    speed: 3
+                })
+            }
         }
 
         watch(() => props.guessLinestring, (newValue) => {
@@ -141,7 +155,7 @@ export default defineComponent({
             guessMarker.value.remove();
             currentLocationMarker.value?.remove();
             
-            zoomToDk();
+            zoomToDk(props.category);
         })
 
         watch(() => props.finished, () => {
@@ -150,7 +164,7 @@ export default defineComponent({
             guessMarker.value.remove();
             currentLocationMarker.value?.remove();
             
-            zoomToDk();
+            zoomToDk('');
         })
 
         return {

@@ -17,6 +17,7 @@
         <div id="category" class="text-3xl">
             <button :disabled="activateButton" @click="showStart('rastepladser')" :class="dynClass">Rastepladser</button>
             <button :disabled="activateButton" @click="showStart('ladestandere')" :class="dynClass">Ladestandere</button>
+            <button :disabled="activateButton" @click="showStart('e55')" :class="dynClass">E55</button>
         </div>
         <Highscore />
     </div>

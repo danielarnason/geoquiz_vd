@@ -1,8 +1,8 @@
 <template>
   <Summary @playAgain="playAgain" v-if="showSummary" :guessDistance="totalGuessDistance"/>
-  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" :guessDistance="guessDistance"/>
+  <Question @finishQuiz="finishQuiz" @nextQuestion="nextQuestion" @guessUpdate="handleGuess" :curLocation="currentLocation" :category="category" :locationIndex="locIndex" v-if="showStart == false" :finished="finished" :guessDistance="guessDistance"/>
   <Start @initialsChange="initialsUpdate" @showStart="updateStart" v-if="showStart" />
-  <Kort @guessUpdated="updateGuess" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished" :guessDistance="guessDistance" />
+  <Kort @guessUpdated="updateGuess" :category="category" :currentLocation="currentLocation" :locations="locations" :locationIndex="locIndex" :guessLinestring="guessLinestring" :finished="finished" :guessDistance="guessDistance" />
 </template>
 
 <script lang="ts">
@@ -11,6 +11,7 @@ import Kort from '@/components/Kort.vue'
 import Start from '@/components/Start.vue'
 import Summary from '@/components/Summary.vue'
 import { rastepladser } from "@/assets/rastepladser";
+import { bygninger } from "@/assets/bygninger";
 import { locationFeature } from '@/locationInterface'
 import { lineString } from "@/linestringInterface";
 import Question from '@/components/Question.vue'
@@ -57,8 +58,8 @@ export default defineComponent({
         locations.value = getRandomLocations(rastepladser.features, numberOfQuestions)
       } else if (data.category == 'ladestandere') {
         locations.value = getRandomLocations(ladestandereLocations.value, numberOfQuestions)
-        console.log(ladestandereLocations.value);
-        
+      } else if (data.category == 'e55') {
+        locations.value = getRandomLocations(bygninger.features, numberOfQuestions)
       }
     }
 
@@ -81,6 +82,8 @@ export default defineComponent({
         await supabase.from<Highscore>('highscore_rastepladser').insert({name: playerInitials.value, score: totalGuessDistance.value})
       } else if (category.value == 'ladestandere') {
         await supabase.from<Highscore>('highscore_ladestandere').insert({name: playerInitials.value, score:totalGuessDistance.value})
+      } else if (category.value == 'e55') {
+        await supabase.from<Highscore>('highscore_e55').insert({name: playerInitials.value, score:totalGuessDistance.value})
       }
     }
 
@@ -121,7 +124,7 @@ export default defineComponent({
     } 
 
     
-    const getRandomLocations = (features: locationFeature[], n: number) => {
+    const getRandomLocations = (features: locationFeature[] | any, n: number) => {
       const result = new Array(n);
         let len = features.length;
         const taken = new Array(len);
@@ -156,7 +159,8 @@ export default defineComponent({
       playAgain,
       initialsUpdate,
       playerInitials,
-      ladestandereLocations
+      ladestandereLocations,
+      category
     }
   }
 });
