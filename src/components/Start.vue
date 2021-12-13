@@ -1,9 +1,9 @@
 <template>
     <div class="start fixed w-full h-full bg-black bg-opacity-50 z-10 flex justify-center items-center flex-col text-yellow-100">
         <div class="intro text-center max-w-screen-sm">
-            <h2 class="text-4xl mb-6">Velkommen til <span class="font-bold text-red-400">VD GEOQUIZ</span>
+            <h2 class="text-4xl mb-6">Velkommen til <span class="font-bold text-red-400">VMA GEOQUIZ</span>
             </h2>
-            <p>Hvor godt kender du VD?</p>
+            <p>Hvor godt kender du E55 og de centrale dele af Danmarkskortet?</p>
         </div>
         <div class="help">
             <p>Klik på kortet og bekræft dit gæt</p>
@@ -15,7 +15,7 @@
         
 
         <div id="category" class="text-3xl">
-            <button :disabled="activateButton" @click="showStart('rastepladser')" :class="dynClass">Rastepladser</button>
+            <!-- <button :disabled="activateButton" @click="showStart('rastepladser')" :class="dynClass">Rastepladser</button> -->
             <button :disabled="activateButton" @click="showStart('ladestandere')" :class="dynClass">Ladestandere</button>
             <button :disabled="activateButton" @click="showStart('e55')" :class="dynClass">E55</button>
         </div>

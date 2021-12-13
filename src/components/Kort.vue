@@ -127,7 +127,7 @@ export default defineComponent({
         }
 
         const zoomToDk = (category: string) => {
-            if (category) {
+            if (category == 'e55') {
                 map.value.flyTo({
                     center: [11.866981, 54.824467],
                     zoom: 11,
