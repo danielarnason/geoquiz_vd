@@ -12,6 +12,7 @@ import Start from '@/components/Start.vue'
 import Summary from '@/components/Summary.vue'
 import { rastepladser } from "@/assets/rastepladser";
 import { bygninger } from "@/assets/bygninger";
+import { boegPaaMuld } from "@/assets/boegPaaMuld";
 import { locationFeature } from '@/locationInterface'
 import { lineString } from "@/linestringInterface";
 import Question from '@/components/Question.vue'
@@ -59,7 +60,9 @@ export default defineComponent({
       } else if (data.category == 'ladestandere') {
         locations.value = getRandomLocations(ladestandereLocations.value, numberOfQuestions)
       } else if (data.category == 'e55') {
-        locations.value = getRandomLocations(bygninger.features, numberOfQuestions)
+        let randLocs = getRandomLocations(bygninger.features, numberOfQuestions - 1)
+        randLocs.unshift(boegPaaMuld)
+        locations.value = randLocs;
       }
     }
 
