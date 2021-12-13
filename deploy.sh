@@ -10,6 +10,6 @@ git init
 
 git add -A
 git commit -m 'deploy'
-git push -f git@github.com:danielarnason/geoquiz_slagelse.git master:gh-pages
+git push -f git@github.com:danielarnason/geoquiz_vd.git master:gh-pages
 
 cd -
